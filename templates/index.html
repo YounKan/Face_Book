@@ -1,14 +1,14 @@
 <html>
   <head>
     <title>Video Streaming Demonstration</title>
-    <link rel="shortcut icon" href="" />
+    <!-- <link rel="shortcut icon" href="" /> -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
-    <script src="{{ url_for('static', filename='js/jquery-3.2.1.slim.min.js') }}" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <!-- <script src="{{ url_for('static', filename='js/jquery-3.2.1.slim.min.js') }}" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/popper.min.js') }}" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
     <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
     <style media="screen">
       .message{
@@ -37,7 +37,7 @@
   <body>
     <h1>Video Streaming Demonstration</h1>
     <div class="container">
-      <!-- <img id="bg" src="{{ url_for('video_feed') }}"> -->
+      <img id="bg" src="{{ url_for('video_feed') }}" >
       <div class="messcards">
     </div>
   </body>
@@ -45,18 +45,19 @@
     var source = new EventSource("/live-data");
     source.onmessage = function(event) {
       var jsonData = JSON.parse(event.data);
-      $(".messcards").append('<div class="col-12"><div class="card">\
-      <div class="card-body">\
-        '+jsonData+'\
-      </div>\
-    </div></div>');
-      // for (var i = 0; i < jsonData.length; i++) {
-      //     var counter = jsonData[i];
-      //     console.log(counter);
-      // }
+      var allbox = ""
+      $(".messcards").empty();
+      for (var i = 0; i < jsonData.length; i++) {
+          var counter = jsonData[i];
+          allbox += '<div class="col-12"><div class="card">\
+                      <div class="card-body">\
+                        '+counter.title+'\
+                      </div>\
+                    </div></div>'
+      }
       console.log(event.data);
       // console.log(jsonData.title);
-      console.log(jsonData.length);
+      $(".messcards").append(allbox);
     };
     </script>
 </html>

@@ -11,7 +11,10 @@ class VideoCamera(object):
         # from a webcam, comment the line below out and use a video file
         # instead.
         self.video = cv2.VideoCapture(0)
+        self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 400)
+        self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 400)
         self.count = 0
+        self.facerec = ""
         with open("you.clf", 'rb') as f:
             self.knn_clf = pickle.load(f)
         # If you decide to use video.mp4, you must have this file in the folder
@@ -30,8 +33,7 @@ class VideoCamera(object):
 
         if success:
             # cv2.imwrite("frame%d.jpg" % self.count, image)  
-            self.count += 1
-            print("- count {}".format(self.count))
+            
             # if process_this_frame:
             # # Resize frame of video to 1/4 size for faster face recognition processing
             # small_frame = cv2.resize(image, (0, 0), fx=1, fy=1)
@@ -44,8 +46,9 @@ class VideoCamera(object):
             X_face_locations = face_recognition.face_locations(image)
 
             if len(X_face_locations) == 0:
-               ret, jpeg = cv2.imencode('.jpg', image)
-               return jpeg.tobytes()
+                self.count = 1 
+                ret, jpeg = cv2.imencode('.jpg', image)
+                return jpeg.tobytes()
 
             # # Find encodings for faces in the test iamge
             faces_encodings = face_recognition.face_encodings(image, known_face_locations=X_face_locations)
@@ -54,12 +57,18 @@ class VideoCamera(object):
 
             # Use the KNN model to find the best matches for the test face
             closest_distances = self.knn_clf.kneighbors(faces_encodings, n_neighbors=1)
-            print(closest_distances)
             are_matches = [closest_distances[0][i][0] <= 0.4 for i in range(len(X_face_locations))]
 
             predictions =  [(pred, loc) if rec else ("unknown", loc) for pred, loc, rec in zip(self.knn_clf.predict(faces_encodings), X_face_locations, are_matches)]
 
             for name, (top, right, bottom, left) in predictions:
+                
+                if self.facerec == name:
+                    self.count += 1
+                else:
+                    self.facerec = name
+                    self.count = 1 
+                print("name {} - count {}".format(self.facerec,self.count))
                 # print("- Found {} at ({}, {})".format(name, left, top))
                 # Scale back up face locations since the frame we detected in was scaled to 1/4 size
                 top -= 20

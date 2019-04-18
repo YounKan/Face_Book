@@ -26,21 +26,26 @@ app = Flask(__name__)
 
 cache = {}
 
+class DataStore():
+    facerec = None
+
+datalocal = DataStore()
+
 databook = pd.read_json('booksdata.json')
-# ratings = pd.read_csv('ratings.csv')
+ratings = pd.read_csv('ratings.csv')
 
-# tf =  TfidfVectorizer(analyzer='word',ngram_range=(1, 2),min_df=0, stop_words='english')
-# tfidf_matrix = tf.fit_transform(databook['feature'])
+tf =  TfidfVectorizer(analyzer='word',ngram_range=(1, 2),min_df=0, stop_words='english')
+tfidf_matrix = tf.fit_transform(databook['feature'])
 
-# cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
+cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
 
 titles = databook[['title','authors','original_publication_year','language_code']]
 
-# reader = Reader()
-# data = Dataset.load_from_df(ratings[['user_id', 'book_id', 'rating']], reader)
-# svd = SVD()
-# trainset = data.build_full_trainset()
-# svd.train(trainset)
+reader = Reader()
+data = Dataset.load_from_df(ratings[['user_id', 'book_id', 'rating']], reader)
+svd = SVD()
+trainset = data.build_full_trainset()
+svd.train(trainset)
 
 def find_feature(title):
   feature =  databook[(databook['title'] == title)].index[0]
@@ -77,14 +82,13 @@ def hybrid(userId):
 
 @app.route('/')
 def index():
-    cache['facerec'] = True
     return render_template('index.html')
 
 def gen(camera):
     while True:
         frame = camera.get_frame()
         if camera.count == 10:
-            cache['facerec'] = True
+            datalocal.facerec = camera.facerec
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
@@ -98,10 +102,9 @@ def live_data():
     print('live stream')
     def live_stream():
         while True:    
-            if cache['facerec']:
-                cache['facerec'] = False
-                book_list = titles.head(5)
-
+            if datalocal.facerec != None:
+                datalocal.facerec = None
+                book_list = hybrid(int(2))
                 bookjson = []
                 for index, row in book_list.iterrows():
                     data ={"title": row['title'],
