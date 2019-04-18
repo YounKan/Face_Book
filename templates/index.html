@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <title>Video Streaming Demonstration</title>
+  </head>
+  <body>
+    <h1>Video Streaming Demonstration</h1>
+    <!-- <img id="bg" src="{{ url_for('video_feed') }}"> -->
+  </body>
+  <script type="text/javascript">
+    var source = new EventSource("/live-data");
+    source.onmessage = function(event) {
+      var jsonData = JSON.parse(event.data);
+      // for (var i = 0; i < jsonData.length; i++) {
+      //     var counter = jsonData[i];
+      //     console.log(counter);
+      // }
+      console.log(event.data);
+      // console.log(jsonData.title);
+      console.log(jsonData.length);
+    };
+    </script>
+</html>
