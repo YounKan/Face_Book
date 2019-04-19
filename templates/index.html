@@ -1,63 +1,132 @@
+
 <html>
-  <head>
-    <title>Video Streaming Demonstration</title>
-    <!-- <link rel="shortcut icon" href="" /> -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
-    <!-- <script src="{{ url_for('static', filename='js/jquery-3.2.1.slim.min.js') }}" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="{{ url_for('static', filename='js/popper.min.js') }}" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
-    <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
-    <style media="screen">
-      .message{
-        width: 100%;
-        border: 1px solid #34909ee6;
-        height: 10%;
-        -webkit-box-shadow: -1px 2px 36px 3px rgba(67,117,114,0.69);
-        -moz-box-shadow: -1px 2px 36px 3px rgba(67,117,114,0.69);
-        box-shadow: -1px 2px 36px 3px rgba(67,117,114,0.69);
+    <head>
+      <title>Video Streaming Demonstration</title>
+      <!-- <link rel="shortcut icon" href="" /> -->
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+      <!-- <link rel="stylesheet" href="/static/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+      <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+      <!-- <script src="/static/js/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="/static/js/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="/static/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+      <script src="/static/js/jquery-3.2.1.min.js"></script>
+      <style media="screen">
+        .message{
+          width: 100%;
+          border: 1px solid #34909ee6;
+          height: 10%;
+          -webkit-box-shadow: -1px 2px 36px 3px rgba(67,117,114,0.69);
+          -moz-box-shadow: -1px 2px 36px 3px rgba(67,117,114,0.69);
+          box-shadow: -1px 2px 36px 3px rgba(67,117,114,0.69);
+        }
+        .messcards{
+          width: 100%;
+          height: 100%;
+          text-align: center;
+        }
+        .card{
+          background-color: #ee4747;
+          padding: 10px;
+          border-radius: 10px;
+          /* border-color: #5963f7;
+          border:5px; */
+        }
+        .messcards .col-12{
+          padding:5px;
+        }
+        .tab-bar{
+          background-color: #5963f7;
+          border-radius: 20px 20px 0 0;
+          padding: 2px 0 0 0;
+        }
+        .tab-button{
+          background-color: #5963f7;
+          border-radius: 20px 20px 0 0;
+          border: 5px;
+          border-color: #ffffff;
+          margin: 0 0 0 5px;
+        }
+        .tab-button:hover {
+          background-color: #59f788;
+        }
+        .selected-tab{
+          background-color: #ffffff;
+        }
+        .box{
+          width: 50%;
+          background-color: #5963f7;
+          border-radius: 20px 20px 0 0;
+          padding: 0 0 1px 0;
+        }
+        .inner-box{
+          background-color: #ffffff;
+          margin: 0 5px 5px 5px;
+          padding: 10px;
+        }
+        .container{
+          justify-items: center;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>Recommendation System</h1>
+  
+      <div class="container">
+        <img id="bg" src="/video_feed" >
+
+        <div class="box">
+          <div class="tab-bar">
+            <button class="tab-button tablink selected-tab" onclick="openTab(event,'Recommend')">Recommend</button>
+            <button class="tab-button tablink" onclick="openTab(event,'History')">History</button>
+          </div>
+          
+          <div id="Recommend" class="inner-box city">
+            <h2>Your Recommendation :</h2>
+            <div class="messcards"></div>
+          </div>
+        
+          <div id="History" class="inner-box city" style="display:none">
+            <h2>History</h2>
+            <p>Paris is the capital of France.</p> 
+          </div>
+        </div>
+      </div>
+      
+      <script>
+      function openTab(evt, cityName) {
+        var i, x, tablinks;
+        x = document.getElementsByClassName("city");
+        for (i = 0; i < x.length; i++) {
+          x[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < x.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" selected-tab", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " selected-tab";
       }
-      .messcards
-      {
-        width: 100%;
-        height: 80%;
-        text-align: center;
-      }
-      .card
-      {
-        background-color: #58d0bf45;
-      }
-      .messcards .col-12{
-        padding:5px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Video Streaming Demonstration</h1>
-    <div class="container">
-      <img id="bg" src="{{ url_for('video_feed') }}" >
-      <div class="messcards">
-    </div>
-  </body>
-  <script type="text/javascript">
-    var source = new EventSource("/live-data");
-    source.onmessage = function(event) {
-      var jsonData = JSON.parse(event.data);
-      var allbox = ""
-      $(".messcards").empty();
-      for (var i = 0; i < jsonData.length; i++) {
-          var counter = jsonData[i];
-          allbox += '<div class="col-12"><div class="card">\
-                      <div class="card-body">\
-                        '+counter.title+'\
-                      </div>\
-                    </div></div>'
-      }
-      console.log(event.data);
-      // console.log(jsonData.title);
-      $(".messcards").append(allbox);
-    };
-    </script>
-</html>
+      </script>
+  
+      <script type="text/javascript">
+        var source = new EventSource("/live-data");
+        source.onmessage = function(event) {
+          var jsonData = JSON.parse(event.data);
+          var allbox = ""
+          $(".messcards").empty();
+          for (var i = 0; i < jsonData.length; i++) {
+              var counter = jsonData[i];
+              allbox += '<div class="col-12"><div class="card">\
+                          <div class="card-body">\
+                            '+counter.title+'\
+                          </div>\
+                        </div></div>'
+          }
+          console.log(event.data);
+          // console.log(jsonData.title);
+          $(".messcards").append(allbox);
+        };
+      </script>
+    </body>
+  </html>
