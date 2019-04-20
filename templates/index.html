@@ -5,7 +5,7 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
       <!-- <link rel="stylesheet" href="/static/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
-      <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+      <!-- <link rel="stylesheet" href="/static/css/font-awesome.min.css"> -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
       <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
       <!-- <script src="/static/js/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -90,6 +90,10 @@
           padding: 10px;
           border-radius: 0 0 15px 15px;
         }
+        @media (min-width: 1200px){
+        .container {
+            width: 1685px;
+        }}
       </style>
     </head>
 
@@ -99,11 +103,11 @@
       <div class="container">
 
         
-      <div class="col-lg-5 col-xs-12">
-        <img id="bg" src="/video_feed" >
-        <!-- <img class="vdo-stream" src="./39297336_p0.jpg" > -->
+      <div class="col-lg-7 col-xs-12">
+        <!-- <img id="bg" src="/video_feed" > -->
+        <img class="vdo-stream" src="./39297336_p0.jpg" >
         </div>
-        <div class="col-lg-7 col-xs-12">
+        <div class="col-lg-5 col-xs-12">
         <div class="box">
           <div class="tab-bar">
             <button class="tab-button tablink selected-button" onclick="openTab(event,'Recommend')">Recommend</button>
@@ -112,7 +116,24 @@
           
           <div id="Recommend" class="inner-box city">
             <h2>Your Recommendation :</h2>
-            <div class="messcards"></div>
+            <!-- <div class="messcards"></div> -->
+
+            <div class="messcards col-12">
+              <div class="card">
+                <div class="card-body">
+                  Storm Front (The Dresden Files, #1)
+                </div>
+                <div>
+                <div class="rating-star"></div>
+              </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  Storm Front
+                </div>
+              </div>
+            </div>
+          </div>
         
           <div id="History" class="inner-box city" style="display:none">
             <h2>Purchase History :</h2>
