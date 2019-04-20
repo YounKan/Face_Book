@@ -3,7 +3,7 @@
       <title>Video Streaming Demonstration</title>
       <!-- <link rel="shortcut icon" href="" /> -->
       <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
       <!-- <link rel="stylesheet" href="/static/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
       <!-- <link rel="stylesheet" href="/static/css/font-awesome.min.css"> -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -16,16 +16,24 @@
         body{
           font-family: 'Varela Round', sans-serif;
         }
+        h1{
+          text-align: center;
+        }
         .vdo-stream {
           display: block;
           margin-left: auto;
           margin-right: auto;
           width: 80%;
+          height: auto;
+        }
+        .vdo-box{
+          display: flex;
+          padding: 5px 0 50px 0;
         }
         .message{
           width: 100%;
           border: 1px solid #34909ee6;
-          height: 10%;
+          /* height: 10%; */
           -webkit-box-shadow: -1px 2px 36px 3px rgba(67,117,114,0.69);
           -moz-box-shadow: -1px 2px 36px 3px rgba(67,117,114,0.69);
           box-shadow: -1px 2px 36px 3px rgba(67,117,114,0.69);
@@ -36,29 +44,28 @@
           text-align: center;
         }
         .card{
-          background-color: #ee4747;
           padding: 10px;
           border-radius: 10px;
           margin: 5px 0;
-          /* border-color: #5963f7;
-          border:5px; */
+          border-style: solid;
+          border-color: #3796BF;
         }
         .messcards .col-12{
           padding:5px;
         }
-        .rating{
+        .rating-star{
           width: 30px;
         }
         .container{
           padding: 25px 50px;
         }
         .tab-bar{
-          background-color: #5963f7;
+          background-color: #3796BF;
           border-radius: 20px 20px 0 0;
           padding: 5px 0 0 0;
         }
         .tab-button{
-          background-color: #5963f7;
+          background-color: #3796BF;
           border-radius: 15px 15px 0 0;
           border: 5px;
           border-color: #ffffff;
@@ -69,7 +76,7 @@
           padding: 10px 35px;
         }
         .tab-button:hover {
-          background-color: #000aa0;
+          background-color: #076b96;
           color: #ffffff;
         }
         .selected-button{
@@ -77,12 +84,14 @@
           color: #000000;
         }
         .box{
-          background-color: #5963f7;
+          background-color: #3796BF;
           border-radius: 20px;
           padding: 0 0 1px 0;
           display: block;
           margin-left: auto;
           margin-right: auto;
+          width: 100%;
+          height:auto;
         }
         .inner-box{
           background-color: #ffffff;
@@ -90,56 +99,79 @@
           padding: 10px;
           border-radius: 0 0 15px 15px;
         }
+        .rec-box{
+          padding: 0 0 0 30px;
+        }
+        @media (min-width: 1300px){
+          .container {
+              width: 1685px;
+          }
+          .vdo-stream {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            height:auto;
+          }
+        }
         @media (min-width: 1200px){
-        .container {
-            width: 1685px;
-        }}
+          .container {
+              width: 1400px;
+          }
+          .vdo-stream {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            height:auto;
+          }
+        }
       </style>
     </head>
 
     <body>
-
     <h1>Recommendation System</h1>
       <div class="container">
-
         
-      <div class="col-lg-7 col-xs-12">
-        <!-- <img id="bg" src="/video_feed" > -->
-        <img class="vdo-stream" src="./39297336_p0.jpg" >
+        <div class="col-lg-6 col-md-12 vdo-box">
+          <!-- <img id="bg" class="vdo-stream" src="/video_feed" > -->
+          <img class="vdo-stream" src="./39297336_p0.jpg" >
         </div>
-        <div class="col-lg-5 col-xs-12">
-        <div class="box">
-          <div class="tab-bar">
-            <button class="tab-button tablink selected-button" onclick="openTab(event,'Recommend')">Recommend</button>
-            <button class="tab-button tablink" onclick="openTab(event,'History')">History</button>
-          </div>
-          
-          <div id="Recommend" class="inner-box city">
-            <h2>Your Recommendation :</h2>
-            <!-- <div class="messcards"></div> -->
 
-            <div class="messcards col-12">
-              <div class="card">
-                <div class="card-body">
-                  Storm Front (The Dresden Files, #1)
+        <div class="col-lg-6 col-md-12 rec-box">
+
+          <div class="box">
+            <div class="tab-bar">
+              <button class="tab-button tablink selected-button" onclick="openTab(event,'Recommend')">Recommend</button>
+              <button class="tab-button tablink" onclick="openTab(event,'History')">History</button>
+            </div>
+            
+            <div id="Recommend" class="inner-box city">
+              <h2>Your Recommendation :</h2>
+              <div class="messcards"></div>
+
+              <!-- <div class="messcards col-12">
+                <div class="card">
+                  <div class="card-body">
+                    Storm Front (The Dresden Files, #1)
+                  </div>
+                  <div>
+                    <img class="rating-star" src="./star.png" >
+                  </div>
                 </div>
-                <div>
-                <div class="rating-star"></div>
-              </div>
-              </div>
-              <div class="card">
-                <div class="card-body">
-                  Storm Front
+                <div class="card">
+                  <div class="card-body">
+                    Storm Front
+                  </div>
                 </div>
-              </div>
+              </div> -->
+            </div>
+          
+            <div id="History" class="inner-box city" style="display:none">
+              <h2>Purchase History :</h2>
+              <p>Paris is the capital of France.</p> 
             </div>
           </div>
-        
-          <div id="History" class="inner-box city" style="display:none">
-            <h2>Purchase History :</h2>
-            <p>Paris is the capital of France.</p> 
-          </div>
-        </div>
         </div>
       </div>
     </body>
@@ -160,22 +192,32 @@
       }
     </script>
     <script type="text/javascript">
-        var source = new EventSource("/live-data");
-        source.onmessage = function(event) {
-          var jsonData = JSON.parse(event.data);
-          var allbox = ""
-          $(".messcards").empty();
-          for (var i = 0; i < jsonData.length; i++) {
-              var counter = jsonData[i];
-              allbox += '<div class="col-12"><div class="card">\
-                          <div class="card-body">\
-                            '+counter.title+'\
-                          </div>\
-                        </div></div>'
-          }
-          console.log(event.data);
-          // console.log(jsonData.title);
-          $(".messcards").append(allbox);
-        };
+      function ratingStar(stars) {
+        allStars = ""
+        for(var i = 0; i < stars; i++){
+          allStars += '<img class="rating-star" src="../image/star.png" >'
+        }
+        return allStars;
+      }
+      var source = new EventSource("/live-data");
+      source.onmessage = function(event) {
+        var jsonData = JSON.parse(event.data);
+        var allbox = ""
+        $(".messcards").empty();
+        for (var i = 0; i < jsonData.length; i++) {
+            var counter = jsonData[i];
+            allbox += '<div class="col-12"><div class="card">\
+                        <div class="card-body">\
+                          '+counter.title+'\
+                        </div>\
+                        <div>\
+                          '+ratingStar(counter.rating)+'\
+                        </div>\
+                      </div></div>'
+        }
+        console.log(event.data);
+        // console.log(jsonData.title);
+        $(".messcards").append(allbox);
+      };
     </script>
   </html>
