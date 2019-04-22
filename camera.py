@@ -15,7 +15,7 @@ class VideoCamera(object):
         self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 400)
         self.count = 0
         self.facerec = ""
-        with open("you.clf", 'rb') as f:
+        with open("facerec.clf", 'rb') as f:
             self.knn_clf = pickle.load(f)
         # If you decide to use video.mp4, you must have this file in the folder
         # as the main.py.
@@ -32,17 +32,19 @@ class VideoCamera(object):
         # video stream.
 
         if success:
+            # self.count +=1
             # cv2.imwrite("frame%d.jpg" % self.count, image)  
+            # print("- Found {}".format(self.count))
             
             # if process_this_frame:
             # # Resize frame of video to 1/4 size for faster face recognition processing
             # small_frame = cv2.resize(image, (0, 0), fx=1, fy=1)
 
-            # # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+            # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
             # rgb_small_frame = image[:, :, ::-1]
 
-            # # Load image file and find face locations
-            # # X_img = face_recognition.load_image_file(image)
+            # Load image file and find face locations
+            # X_img = face_recognition.load_image_file(image)
             X_face_locations = face_recognition.face_locations(image)
 
             if len(X_face_locations) == 0:
