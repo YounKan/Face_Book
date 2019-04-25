@@ -17,8 +17,9 @@ class DataStore():
 
 datalocal = DataStore()
 
-databook = pd.read_json('booksdata.json')
-ratings = pd.read_csv('ratings.csv')
+databook = pd.read_json('data/booksdata.json')
+# tagbooks = pd.read_json('data/bookst.json')
+ratings = pd.read_csv('data/ratings.csv')
 
 # tf =  TfidfVectorizer(analyzer='word',ngram_range=(1, 2),min_df=0, stop_words='english')
 # tfidf_matrix = tf.fit_transform(databook['feature'])
@@ -85,6 +86,8 @@ def video_feed():
 @app.route('/live-data')
 def live_data():
     print('live stream')
+    with open('data/bookt.json') as json_file:  
+                    booktags = json.load(json_file)
     def live_stream():
         while True:    
             if datalocal.facerec != None:
@@ -102,6 +105,7 @@ def live_data():
 
                 testbook = {
                     "databooks": bookjson,
+                    "booktags": booktags,
                     "face": "unknown"
                 }
                 
