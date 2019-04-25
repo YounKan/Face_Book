@@ -233,13 +233,13 @@
                 <div class="messcards">'
       
         for (var i = 0; i < databooks.length; i++) {
-            var counter = databooks[i];
+            var book = databooks[i];
             recbox += '<div class="col-12"><div class="card">\
                         <div class="card-body">\
-                          '+counter.title+'\
+                          '+book.title+'\
                         </div>\
                         <div>\
-                          '+ratingStar(counter.rating)+'\
+                          '+ratingStar(book.rating)+'\
                         </div>\
                       </div></div>'
         }
