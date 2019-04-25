@@ -135,44 +135,45 @@
       <div class="container">
         
         <div class="col-lg-6 col-md-12 vdo-box">
-          <img id="bg" class="vdo-stream" src="/video_feed" >
+          <!-- <img id="bg" class="vdo-stream" src="/video_feed" > -->
           <!-- <img class="vdo-stream" src="./39297336_p0.jpg" > -->
         </div>
 
-        <div class="col-lg-6 col-md-12 rec-box">
+        <div class="col-lg-6 col-md-12 ">
+          <div class="content-box"></div>
+          <!-- <div class="rec-box">
+            <div class="box">
+              <div class="tab-bar">
+                <button class="tab-button tablink selected-button" onclick="openTab(event,'Recommend')">Recommend</button>
+                <button class="tab-button tablink" onclick="openTab(event,'History')">History</button>
+              </div>
+              <div id="Recommend" class="inner-box city">
+                <h2>Your Recommendation :</h2>
+                <div class="messcards"></div> -->
 
-          <div class="box">
-            <div class="tab-bar">
-              <button class="tab-button tablink selected-button" onclick="openTab(event,'Recommend')">Recommend</button>
-              <button class="tab-button tablink" onclick="openTab(event,'History')">History</button>
-            </div>
-            
-            <div id="Recommend" class="inner-box city">
-              <h2>Your Recommendation :</h2>
-              <div class="messcards"></div>
-
-              <!-- <div class="messcards col-12">
-                <div class="card">
-                  <div class="card-body">
-                    Storm Front (The Dresden Files, #1)
+                <!-- <div class="messcards col-12">
+                  <div class="card">
+                    <div class="card-body">
+                      Storm Front (The Dresden Files, #1)
+                    </div>
+                    <div>
+                      <img class="rating-star" src="./star.png" >
+                    </div>
                   </div>
-                  <div>
-                    <img class="rating-star" src="./star.png" >
+                  <div class="card">
+                    <div class="card-body">
+                      Storm Front
+                    </div>
                   </div>
-                </div>
-                <div class="card">
-                  <div class="card-body">
-                    Storm Front
-                  </div>
-                </div>
-              </div> -->
+                </div> -->
+              <!-- </div>
             </div>
           
             <div id="History" class="inner-box city" style="display:none">
               <h2>Purchase History :</h2>
               <p>Paris is the capital of France.</p> 
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </body>
@@ -193,21 +194,47 @@
       }
     </script>
     <script type="text/javascript">
+
+
       function ratingStar(stars) {
         allStars = ""
         for(var i = 0; i < stars; i++){
-          allStars += '<img class="rating-star" src="../image/star.png" >'
+          var checkhalf = ((stars - (i+1)) === 0.5);
+            allStars += '<img class="rating-star" src="/static/image/star.png" >'
+          if(checkhalf){
+            allStars += '<img class="rating-star" src="/static/image/star2.png" >'
+            return allStars;
+          }  
         }
         return allStars;
       }
+
       var source = new EventSource("/live-data");
       source.onmessage = function(event) {
         var jsonData = JSON.parse(event.data);
-        var allbox = ""
-        $(".messcards").empty();
-        for (var i = 0; i < jsonData.length; i++) {
-            var counter = jsonData[i];
-            allbox += '<div class="col-12"><div class="card">\
+        var databooks = jsonData.databooks;
+        var face = jsonData.face;
+        var recbox = ""
+        console.log(event.data);
+        // if(face == "unknown"){
+        //   $(".rec-box").empty();
+        // }
+      
+        $(".content-box").empty();
+
+        recbox = '<div class="rec-box">\
+            <div class="box">\
+              <div class="tab-bar">\
+                <button class="tab-button tablink selected-button" onclick="openTab(event,\'Recommend\')">Recommend</button>\
+                <button class="tab-button tablink" onclick="openTab(event,\'History\')">History</button>\
+              </div>\
+              <div id="Recommend" class="inner-box city">\
+                <h2>Your Recommendation :</h2>\
+                <div class="messcards">'
+      
+        for (var i = 0; i < databooks.length; i++) {
+            var counter = databooks[i];
+            recbox += '<div class="col-12"><div class="card">\
                         <div class="card-body">\
                           '+counter.title+'\
                         </div>\
@@ -216,9 +243,12 @@
                         </div>\
                       </div></div>'
         }
-        console.log(event.data);
-        // console.log(jsonData.title);
-        $(".messcards").append(allbox);
+        recbox += '</div></div></div>\
+            <div id="History" class="inner-box city" style="display:none">\
+              <h2>Purchase History :</h2>\
+              <p>Paris is the capital of France.</p> \
+            </div></div>'
+        $(".content-box").append(recbox);
       };
     </script>
   </html>
