@@ -15,10 +15,12 @@
       <style media="screen">
         body{
           font-family: 'Varela Round', sans-serif;
-          padding: 45px 0;
+          /* padding: 45px 0; */
         }
         h1{
           text-align: center;
+          font-size: 60px;
+          color: #ffffff;
         }
         .vdo-stream {
           display: block;
@@ -41,8 +43,10 @@
         }
         .messcards{
           width: 100%;
-          height: auto;
-          text-align: center;
+          height: 400px;
+          /* text-align: center; */
+          overflow-y: scroll;
+          overflow-x: hidden;
         }
         .card{
           padding: 10px;
@@ -51,12 +55,23 @@
           border-style: solid;
           border-color: #3796BF;
         }
+        .card-box{
+          margin: 5px 0;
+        }
         .messcards .col-12{
           padding:5px;
         }
+        .card-body{
+          font-size: 15px;
+        }
         .rating-star{
-          height: 30px;
-          padding: 0 5px;
+          height: 35px;
+          padding: 0px 5px;
+          margin-top: 13px;
+        }
+        .banner{
+          background-color: #3796BF;
+          padding: 15px 0;
         }
         .container{
           padding: 25px 50px;
@@ -101,6 +116,14 @@
           padding: 10px;
           border-radius: 0 0 15px 15px;
         }
+        .inner-box h2 {
+          font-size: 30px;
+        }
+        .img-book{
+          height: 95px;
+          width : "auto";
+        }
+        /* ----- unknown face ----- */
         .rec-box{
           padding: 0 0 0 30px;
         }
@@ -168,7 +191,9 @@
     </head>
 
     <body>
-    <h1>Recommendation System</h1>
+      <div class="banner">
+        <h1>Recommendation System</h1>
+      </div>
       <div class="container">
         
         <div class="col-lg-6 col-md-12 vdo-box">
@@ -176,8 +201,8 @@
           <!-- <img class="vdo-stream" src="./39297336_p0.jpg" > -->
         </div>
 
-        <div class="col-lg-6 col-md-12 ">
-          <div class="content-box"></div>
+        <!-- <div class="col-lg-6 col-md-12 "> -->
+          <div class="col-lg-6 col-md-12 content-box"></div>
           <!-- <div class="rec-box">
             <div class="box">
               <div class="tab-bar">
@@ -210,9 +235,9 @@
               <h2>Purchase History :</h2>
               <p>Paris is the capital of France.</p> 
             </div>
-          </div> -->
-        </div>
+        </div> -->
       </div>
+      <!-- </div> -->
     </body>
 
     <script>
@@ -312,20 +337,25 @@
       
         for (var i = 0; i < databooks.length; i++) {
             var book = databooks[i];
-            recbox += '<div class="col-12"><div class="card">\
-                        <div class="card-body">\
-                          '+book.title+'\
+            recbox += '<div class="card col-sm-12 col-md-12 col-lg-12">\
+                        <div class=".col-sm-2 col-md-2 col-lg-2">\
+                            <img class="img-book" src="'+book.img+'" alt="'+book.img+'">\
                         </div>\
-                        <div>\
-                          '+ratingStar(book.rating)+'\
+                        <div class="card-box col-sm-10 col-md-10 col-lg-10">\
+                          <div class="card-body">\
+                            '+book.title+'\
+                          </div>\
+                          <div>\
+                            '+ratingStar(book.rating)+'\
+                          </div>\
                         </div>\
-                      </div></div>'
+                      </div>'
         }
-        recbox += '</div></div></div>\
+        recbox += '</div></div>\
             <div id="History" class="inner-box city" style="display:none">\
               <h2>Purchase History :</h2>\
               <p>Paris is the capital of France.</p> \
-            </div></div>'
+            </div></div></div>'
         $(".content-box").append(recbox);
       };
     </script>
