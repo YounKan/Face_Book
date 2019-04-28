@@ -103,6 +103,42 @@
         .rec-box{
           padding: 0 0 0 30px;
         }
+        .dropbtn {
+          background-color: #4CAF50;
+          color: white;
+          padding: 16px;
+          font-size: 16px;
+          width: 230px;
+          border-color: #3796BF;
+          border-radius: 15px;
+          margin: 5px;
+        }
+        .dropdown {
+          display: inline-block;
+        }
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f1f1f1;
+          min-width: 400px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+        .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
+        .dropdown-content a:hover {background-color: #ddd;}
+        .dropdown:hover .dropdown-content {display: block;}
+        .dropdown:hover .dropbtn {background-color: #3e8e41;}
+        .list-group{
+          max-height: 200px;
+          margin-bottom: 10px;
+          overflow:scroll;
+          -webkit-overflow-scrolling: touch;
+        }
         @media (min-width: 1300px){
           .container {
               width: 1685px;
@@ -127,41 +163,6 @@
             height:auto;
           }
         }
-
-        .dropbtn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-content a:hover {background-color: #ddd;}
-
-.dropdown:hover .dropdown-content {display: block;}
-
-.dropdown:hover .dropbtn {background-color: #3e8e41;}
       </style>
     </head>
 
@@ -229,8 +230,6 @@
       }
     </script>
     <script type="text/javascript">
-
-
       function ratingStar(stars) {
         allStars = ""
         for(var i = 0; i < stars; i++){
@@ -242,6 +241,28 @@
           }  
         }
         return allStars;
+      }
+
+      function getListcontent(tagbook) {
+        var strList = ""
+        for(var j = 0; j < tagbook.length; j++){
+                var book = tagbook[j];
+                strList += '<a href="#">\
+                '+book.title+'\
+                </a>'
+                }
+        return strList;
+      }
+
+      var btnstatus = new Array(10).fill(false);
+      function submitButtonStyle(_this,id) {
+        btnstatus[id] = ((btnstatus[id] === false)? true:false);
+        if(btnstatus[id]){
+        _this.style.backgroundColor = "red";
+        }else{
+        _this.style.backgroundColor = "#4CAF50";
+        }
+       
       }
 
       var source = new EventSource("/live-data");
@@ -256,16 +277,25 @@
 
         if(face == "unknown"){
           $(".content-box").empty();
-          var hoverf = '<div class="dropdown">\
-              <button class="dropbtn">Dropdown</button>\
+          var hoverf = ""
+          for (var i = 0; i < tagbooks.length; i++) {
+            var tag = tagbooks[i];
+            var hoverf = '<div class="dropdown col-md-6">\
+              <button onclick="submitButtonStyle(this,'+i+')" type="submit" class="dropbtn">\
+              '+tag.tag_name+'\
+              </button>\
               <div class="dropdown-content">\
-                <a href="#">Link 1</a>\
-                <a href="#">Link 2</a>\
-                <a href="#">Link 3</a>\
-              </div>\
-            </div>'
+                <ul class="list-group">\
+                  <li class="list-group-item">\
+                            <div class="media">'
+                hoverf += getListcontent(tag.books);
+                hoverf += '</div></li></ul></div></div>'
             $(".content-box").append(hoverf);
+          }
         }
+
+
+
       
         // $(".content-box").empty();
 
