@@ -1,5 +1,5 @@
 from flask import Flask, render_template, Response, url_for
-from camera import VideoCamera
+# from camera import VideoCamera
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
@@ -70,18 +70,18 @@ ratings = pd.read_csv('data/ratings.csv')
 def index():
     return render_template('index.html')
 
-def gen(camera):
-    while True:
-        frame = camera.get_frame()
-        if camera.count == 10:
-            datalocal.facerec = camera.facerec
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+# def gen(camera):
+#     while True:
+#         frame = camera.get_frame()
+#         if camera.count == 10:
+#             datalocal.facerec = camera.facerec
+#         yield (b'--frame\r\n'
+#                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
-@app.route('/video_feed')
-def video_feed():
-    return Response(gen(VideoCamera()),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+# @app.route('/video_feed')
+# def video_feed():
+#     return Response(gen(VideoCamera()),
+#                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/live-data')
 def live_data():

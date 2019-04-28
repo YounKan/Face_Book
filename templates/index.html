@@ -275,57 +275,57 @@
 
         console.log(event.data);
 
-        if(face == "unknown"){
-          $(".content-box").empty();
-          var hoverf = ""
-          for (var i = 0; i < tagbooks.length; i++) {
-            var tag = tagbooks[i];
-            var hoverf = '<div class="dropdown col-md-6">\
-              <button onclick="submitButtonStyle(this,'+i+')" type="submit" class="dropbtn">\
-              '+tag.tag_name+'\
-              </button>\
-              <div class="dropdown-content">\
-                <ul class="list-group">\
-                  <li class="list-group-item">\
-                            <div class="media">'
-                hoverf += getListcontent(tag.books);
-                hoverf += '</div></li></ul></div></div>'
-            $(".content-box").append(hoverf);
-          }
-        }
-
-
-
-      
-        // $(".content-box").empty();
-
-        // recbox = '<div class="rec-box">\
-        //     <div class="box">\
-        //       <div class="tab-bar">\
-        //         <button class="tab-button tablink selected-button" onclick="openTab(event,\'Recommend\')">Recommend</button>\
-        //         <button class="tab-button tablink" onclick="openTab(event,\'History\')">History</button>\
-        //       </div>\
-        //       <div id="Recommend" class="inner-box city">\
-        //         <h2>Your Recommendation :</h2>\
-        //         <div class="messcards">'
-      
-        // for (var i = 0; i < databooks.length; i++) {
-        //     var book = databooks[i];
-        //     recbox += '<div class="col-12"><div class="card">\
-        //                 <div class="card-body">\
-        //                   '+book.title+'\
-        //                 </div>\
-        //                 <div>\
-        //                   '+ratingStar(book.rating)+'\
-        //                 </div>\
-        //               </div></div>'
+        // if(face == "unknown"){
+        //   $(".content-box").empty();
+        //   var hoverf = ""
+        //   for (var i = 0; i < tagbooks.length; i++) {
+        //     var tag = tagbooks[i];
+        //     var hoverf = '<div class="dropdown col-md-6">\
+        //       <button onclick="submitButtonStyle(this,'+i+')" type="submit" class="dropbtn">\
+        //       '+tag.tag_name+'\
+        //       </button>\
+        //       <div class="dropdown-content">\
+        //         <ul class="list-group">\
+        //           <li class="list-group-item">\
+        //                     <div class="media">'
+        //         hoverf += getListcontent(tag.books);
+        //         hoverf += '</div></li></ul></div></div>'
+        //     $(".content-box").append(hoverf);
+        //   }
         // }
-        // recbox += '</div></div></div>\
-        //     <div id="History" class="inner-box city" style="display:none">\
-        //       <h2>Purchase History :</h2>\
-        //       <p>Paris is the capital of France.</p> \
-        //     </div></div>'
-        // $(".content-box").append(recbox);
+
+
+
+      
+        $(".content-box").empty();
+
+        recbox = '<div class="rec-box">\
+            <div class="box">\
+              <div class="tab-bar">\
+                <button class="tab-button tablink selected-button" onclick="openTab(event,\'Recommend\')">Recommend</button>\
+                <button class="tab-button tablink" onclick="openTab(event,\'History\')">History</button>\
+              </div>\
+              <div id="Recommend" class="inner-box city">\
+                <h2>Your Recommendation :</h2>\
+                <div class="messcards">'
+      
+        for (var i = 0; i < databooks.length; i++) {
+            var book = databooks[i];
+            recbox += '<div class="col-12"><div class="card">\
+                        <div class="card-body">\
+                          '+book.title+'\
+                        </div>\
+                        <div>\
+                          '+ratingStar(book.rating)+'\
+                        </div>\
+                      </div></div>'
+        }
+        recbox += '</div></div></div>\
+            <div id="History" class="inner-box city" style="display:none">\
+              <h2>Purchase History :</h2>\
+              <p>Paris is the capital of France.</p> \
+            </div></div>'
+        $(".content-box").append(recbox);
       };
     </script>
   </html>
