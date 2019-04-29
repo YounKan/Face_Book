@@ -13,7 +13,7 @@ app = Flask(__name__)
 cache = {}
 
 class DataStore():
-    facerec = "None"
+    facerec = None
 
 datalocal = DataStore()
 
