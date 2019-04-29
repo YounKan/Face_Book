@@ -1,5 +1,5 @@
 from flask import Flask, render_template, Response, url_for
-from camera import VideoCamera
+# from camera import VideoCamera
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
@@ -17,8 +17,9 @@ class DataStore():
 
 datalocal = DataStore()
 
-databook = pd.read_json('booksdata.json')
-ratings = pd.read_csv('ratings.csv')
+databook = pd.read_json('data/booksdata.json')
+# tagbooks = pd.read_json('data/bookst.json')
+ratings = pd.read_csv('data/ratings.csv')
 
 tf =  TfidfVectorizer(analyzer='word',ngram_range=(1, 2),min_df=0, stop_words='english')
 tfidf_matrix = tf.fit_transform(databook['feature'])
@@ -69,22 +70,24 @@ def hybrid(userId):
 def index():
     return render_template('index.html')
 
-def gen(camera):
-    while True:
-        frame = camera.get_frame()
-        if camera.count == 10:
-            datalocal.facerec = camera.facerec
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+# def gen(camera):
+#     while True:
+#         frame = camera.get_frame()
+#         if camera.count == 10:
+#             datalocal.facerec = camera.facerec
+#         yield (b'--frame\r\n'
+#                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
-@app.route('/video_feed')
-def video_feed():
-    return Response(gen(VideoCamera()),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+# @app.route('/video_feed')
+# def video_feed():
+#     return Response(gen(VideoCamera()),
+#                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/live-data')
 def live_data():
     print('live stream')
+    with open('data/bookt.json') as json_file:  
+                    booktags = json.load(json_file)
     def live_stream():
         while True:    
             if datalocal.facerec != None:
@@ -103,6 +106,7 @@ def live_data():
 
                 testbook = {
                     "databooks": bookjson,
+                    "booktags": booktags,
                     "face": "unknown"
                 }
                 
