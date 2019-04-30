@@ -128,7 +128,7 @@ def live_data():
                 elif datalocal.facerec == "tag":
                     jsondata = get_bookrec_api(hybrid("tag",int(datalocal.tagrec)),"tag")
                 else:
-                    face = facedata[(facedata['user_id'] == datalocal.facrec)]
+                    face = facedata[(facedata['user_id'] == datalocal.facerec)]
                     userid = face['face_id'].values[0]
                     jsondata = get_bookrec_api(hybrid("user",int(userid)),"know")
                
@@ -136,7 +136,7 @@ def live_data():
                 yield "data: " + json.dumps(jsondata) + "\n\n"
     return Response(live_stream(), mimetype= 'text/event-stream')
 
-@app.route('/save_data')
+@app.route('/select')
 def save_data():
     datalocal.facerec = "tag"
     datalocal.tagrec = request.args['tag_id']

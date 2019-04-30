@@ -243,7 +243,7 @@
         if(btnstatus[id]){
         _this.style.backgroundColor = "red";
         
-        $.get('/save_data',{'tag_id': tagid})
+        $.get('/select',{'tag_id': tagid})
         .done(function(data){
           console.log(data);
         })
