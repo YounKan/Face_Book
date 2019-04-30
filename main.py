@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, url_for
+from flask import Flask, render_template, Response, url_for, request
 from camera import VideoCamera
 import pandas as pd
 import numpy as np
@@ -7,6 +7,7 @@ from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
 from surprise import Reader, Dataset, SVD, evaluate
 import json
 import math
+import pickle
 
 app = Flask(__name__)
 
@@ -14,13 +15,19 @@ cache = {}
 
 class DataStore():
     facerec = None
+    tagrec = None
 
 datalocal = DataStore()
 
 databook = pd.read_json('data/booksdata.json')
-# tagbooks = pd.read_json('data/bookst.json')
+tags = pd.read_json('data/bookt.json')
+facedata = pd.read_csv('data/friend_face_id.csv')
 ratings = pd.read_csv('data/ratings.csv')
 
+with open('data/bookt.json') as json_file:  
+    booktags = json.load(json_file)
+
+# Content-based
 tf =  TfidfVectorizer(analyzer='word',ngram_range=(1, 2),min_df=0, stop_words='english')
 tfidf_matrix = tf.fit_transform(databook['feature'])
 
@@ -28,28 +35,31 @@ cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
 
 titles = databook[['title','authors','small_image_url','average_rating']]
 
-reader = Reader()
-data = Dataset.load_from_df(ratings[['user_id', 'book_id', 'rating']], reader)
-svd = SVD()
-trainset = data.build_full_trainset()
-svd.train(trainset)
+# CF
+with open('data/bookrec.clf', 'rb') as f:
+    recbook = pickle.load(f)
+
 
 def find_feature(title):
   feature =  databook[(databook['title'] == title)].index[0]
   return feature
 
-def get_recommendations(title):
-    idx = find_feature(title)
-    sim_scores = list(enumerate(cosine_sim[idx]))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    sim_scores = sim_scores[1:31]
-    book_indices = [i[0] for i in sim_scores]
-    return titles.iloc[book_indices]
+def get_book(statusRec , Id):
+  listbook = []
+  if statusRec == "user":
+    userbooks = ratings[(ratings['user_id'] == Id)]
+    userbooks = userbooks.merge(databook[['title', 'book_id']], on='book_id')
+    listbook = list(userbooks['title'])
+  else:
+    tagbooks = tags[(tags['tag_id'] == Id)]
+    for book in tagbooks['books'].values[0]:
+      listbook.append(book['title'])
+      
+  return listbook
 
-def hybrid(userId):
-  userbooks = ratings[(ratings['user_id'] == userId)]
-  userbooks = userbooks.merge(databook[['title', 'book_id']], on='book_id')
-  titlebook = list(userbooks['title'])
+def hybrid(statusRec , Id):
+  
+  titlebook = get_book(statusRec,Id)
   
   bookrecs = pd.DataFrame()
 
@@ -59,12 +69,31 @@ def hybrid(userId):
       sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
       sim_scores = sim_scores[1:31]
       book_indices = [i[0] for i in sim_scores]
-      bookrec = databook.iloc[book_indices][['book_id','title','authors','small_image_url','average_rating']]
+      bookrec = databook.iloc[book_indices][['book_id','title','authors','small_image_url','average_rating','language_code']]
       bookrecs = pd.concat([pd.DataFrame(bookrec), bookrecs], ignore_index=True)
-      bookrecs['est'] = bookrecs['book_id'].apply(lambda x: svd.predict(userId, x).est)
+      bookrecs['est'] = bookrecs['book_id'].apply(lambda x: recbook.predict(Id, x).est)
       bookrecs = bookrecs.sort_values('est', ascending=False)
       
-  return bookrecs.head(10)
+  return bookrecs.head(5)
+
+def get_bookrec_api(book_list , face):
+
+    bookjson = []
+    for index, row in book_list.iterrows():
+        data ={
+            "title": row['title'],
+            "authors": row['authors'],
+            "img": row['small_image_url'],
+            "rating": math.ceil(row['average_rating'] * 2) / 2 
+        }
+        bookjson.append(data)
+
+    testbook = {
+        "databooks": bookjson,
+        "booktags": booktags,
+        "face": face
+    }
+    return testbook
 
 @app.route('/')
 def index():
@@ -73,7 +102,7 @@ def index():
 def gen(camera):
     while True:
         frame = camera.get_frame()
-        if camera.count == 10:
+        if camera.count == 5:
             datalocal.facerec = camera.facerec
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
@@ -86,39 +115,31 @@ def video_feed():
 @app.route('/live-data')
 def live_data():
     print('live stream')
-    with open('data/bookt.json') as json_file:  
-        booktags = json.load(json_file)
     def live_stream():
         while True:    
             if datalocal.facerec != None:
-                if datalocal.facerec == "test":
-                    book_list = hybrid(int(9))
-                else:
-                    book_list = hybrid(int(18052539))
-                # book_list = databook.head(5)
-                bookjson = []
-                for index, row in book_list.iterrows():
-                    data ={
-                        "title": row['title'],
-                        "authors": row['authors'],
-                        "img": row['small_image_url'],
-                        "rating": math.ceil(row['average_rating'] * 2) / 2 
+                jsondata = {}
+                if datalocal.facerec == "unknown":
+                    jsondata = {
+                        "databooks": "",
+                        "booktags": booktags,
+                        "face": "select"
                     }
-                    bookjson.append(data)
-
-                testbook = {
-                    "databooks": bookjson,
-                    "booktags": booktags,
-                    "face": datalocal.facerec
-                }
+                elif datalocal.facerec == "tag":
+                    jsondata = get_bookrec_api(hybrid("tag",int(datalocal.tagrec)),"tag")
+                else:
+                    face = facedata[(facedata['user_id'] == datalocal.facrec)]
+                    userid = face['face_id'].values[0]
+                    jsondata = get_bookrec_api(hybrid("user",int(userid)),"know")
+               
                 datalocal.facerec = None
-                # book_list = hybrid(int(2)).to_json
-                yield "data: " + json.dumps(testbook) + "\n\n"
+                yield "data: " + json.dumps(jsondata) + "\n\n"
     return Response(live_stream(), mimetype= 'text/event-stream')
 
 @app.route('/save_data')
 def save_data():
-    datalocal.facerec = "test"
+    datalocal.facerec = "tag"
+    datalocal.tagrec = request.args['tag_id']
     return 'success'
 
 if __name__ == '__main__':

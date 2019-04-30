@@ -1,16 +1,10 @@
 <html>
     <head>
       <title>Video Streaming Demonstration</title>
-      <!-- <link rel="shortcut icon" href="" /> -->
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
-      <!-- <link rel="stylesheet" href="/static/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
-      <!-- <link rel="stylesheet" href="/static/css/font-awesome.min.css"> -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
       <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
-      <!-- <script src="/static/js/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-      <script src="/static/js/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-      <script src="/static/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
       <script src="/static/js/jquery-3.2.1.min.js"></script>
       <style media="screen">
         body{
@@ -196,49 +190,11 @@
         <h1>Recommendation System</h1>
       </div>
       <div class="container">
-        
         <div class="col-lg-6 col-md-12 vdo-box">
           <img id="bg" class="vdo-stream" src="/video_feed" >
-          <!-- <img class="vdo-stream" src="./39297336_p0.jpg" > -->
         </div>
-
-        <!-- <div class="col-lg-6 col-md-12 "> -->
           <div class="col-lg-6 col-md-12 content-box"></div>
-          <!-- <div class="rec-box">
-            <div class="box">
-              <div class="tab-bar">
-                <button class="tab-button tablink selected-button" onclick="openTab(event,'Recommend')">Recommend</button>
-                <button class="tab-button tablink" onclick="openTab(event,'History')">History</button>
-              </div>
-              <div id="Recommend" class="inner-box city">
-                <h2>Your Recommendation :</h2>
-                <div class="messcards"></div> -->
-
-                <!-- <div class="messcards col-12">
-                  <div class="card">
-                    <div class="card-body">
-                      Storm Front (The Dresden Files, #1)
-                    </div>
-                    <div>
-                      <img class="rating-star" src="./star.png" >
-                    </div>
-                  </div>
-                  <div class="card">
-                    <div class="card-body">
-                      Storm Front
-                    </div>
-                  </div>
-                </div> -->
-              <!-- </div>
-            </div>
-          
-            <div id="History" class="inner-box city" style="display:none">
-              <h2>Purchase History :</h2>
-              <p>Paris is the capital of France.</p> 
-            </div>
-        </div> -->
       </div>
-      <!-- </div> -->
     </body>
 
     <script>
@@ -282,11 +238,12 @@
       }
 
       var btnstatus = new Array(10).fill(false);
-      function submitButtonStyle(_this,id) {
+      function submitButtonStyle(_this,id,tagid) {
         btnstatus[id] = ((btnstatus[id] === false)? true:false);
         if(btnstatus[id]){
         _this.style.backgroundColor = "red";
-        $.get('/save_data',{'data':$("input[type=text]").val()})
+        
+        $.get('/save_data',{'tag_id': tagid})
         .done(function(data){
           console.log(data);
         })
@@ -307,13 +264,12 @@
 
         console.log(event.data);
         $(".content-box").empty();
-        if(face == "unknown"){
-          
+        if(face == "select"){
           var hoverf = ""
           for (var i = 0; i < tagbooks.length; i++) {
             var tag = tagbooks[i];
             var hoverf = '<div class="dropdown col-md-6">\
-              <button onclick="submitButtonStyle(this,'+i+')" type="submit" class="dropbtn">\
+              <button onclick="submitButtonStyle(this,'+i+','+tag.tag_id+')" type="submit" class="dropbtn">\
               '+tag.tag_name+'\
               </button>\
               <div class="dropdown-content">\
