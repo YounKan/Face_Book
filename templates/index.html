@@ -286,6 +286,11 @@
         btnstatus[id] = ((btnstatus[id] === false)? true:false);
         if(btnstatus[id]){
         _this.style.backgroundColor = "red";
+        $.get('/save_data',{'data':$("input[type=text]").val()})
+        .done(function(data){
+          console.log(data);
+        })
+
         }else{
         _this.style.backgroundColor = "#4CAF50";
         }
@@ -301,30 +306,25 @@
         var recbox = ""
 
         console.log(event.data);
-
-        // if(face == "unknown"){
-        //   $(".content-box").empty();
-        //   var hoverf = ""
-        //   for (var i = 0; i < tagbooks.length; i++) {
-        //     var tag = tagbooks[i];
-        //     var hoverf = '<div class="dropdown col-md-6">\
-        //       <button onclick="submitButtonStyle(this,'+i+')" type="submit" class="dropbtn">\
-        //       '+tag.tag_name+'\
-        //       </button>\
-        //       <div class="dropdown-content">\
-        //         <ul class="list-group">\
-        //           <li class="list-group-item">\
-        //                     <div class="media">'
-        //         hoverf += getListcontent(tag.books);
-        //         hoverf += '</div></li></ul></div></div>'
-        //     $(".content-box").append(hoverf);
-        //   }
-        // }
-
-
-
-      
         $(".content-box").empty();
+        if(face == "unknown"){
+          
+          var hoverf = ""
+          for (var i = 0; i < tagbooks.length; i++) {
+            var tag = tagbooks[i];
+            var hoverf = '<div class="dropdown col-md-6">\
+              <button onclick="submitButtonStyle(this,'+i+')" type="submit" class="dropbtn">\
+              '+tag.tag_name+'\
+              </button>\
+              <div class="dropdown-content">\
+                <ul class="list-group">\
+                  <li class="list-group-item">\
+                            <div class="media">'
+                hoverf += getListcontent(tag.books);
+                hoverf += '</div></li></ul></div></div>'
+            $(".content-box").append(hoverf);
+          }
+        }else{
 
         recbox = '<div class="rec-box">\
             <div class="box">\
@@ -358,6 +358,8 @@
               <p>Paris is the capital of France.</p> \
             </div></div></div>'
         $(".content-box").append(recbox);
-      };
+      
+        }
+      };   
     </script>
   </html>

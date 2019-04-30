@@ -87,12 +87,14 @@ def video_feed():
 def live_data():
     print('live stream')
     with open('data/bookt.json') as json_file:  
-                    booktags = json.load(json_file)
+        booktags = json.load(json_file)
     def live_stream():
         while True:    
             if datalocal.facerec != None:
-                datalocal.facerec = None
-                book_list = hybrid(int(18052539))
+                if datalocal.facerec == "test":
+                    book_list = hybrid(int(9))
+                else:
+                    book_list = hybrid(int(18052539))
                 # book_list = databook.head(5)
                 bookjson = []
                 for index, row in book_list.iterrows():
@@ -107,16 +109,17 @@ def live_data():
                 testbook = {
                     "databooks": bookjson,
                     "booktags": booktags,
-                    "face": "unknown"
+                    "face": datalocal.facerec
                 }
-                
+                datalocal.facerec = None
                 # book_list = hybrid(int(2)).to_json
                 yield "data: " + json.dumps(testbook) + "\n\n"
     return Response(live_stream(), mimetype= 'text/event-stream')
 
-@app.route('/s')
-def Home():
-    return "<h1>Hello World!</h1>"
+@app.route('/save_data')
+def save_data():
+    datalocal.facerec = "test"
+    return 'success'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
